@@ -1,5 +1,0 @@
-{{ if (eq .chezmoi.os "windows") }}
-{{ end }}
-{{ if (eq .chezmoi.os "linux") }}
-AppData
-{{ end }}

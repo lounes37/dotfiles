@@ -1,0 +1,16 @@
+{{ if ne .chezmoi.os "linux" }}
+.local/share/fonts
+{{ else }}
+AppData
+Documents
+{{ end }
+
+{{ if ne .chezmoi.os "windows" }}
+AppData
+Documents
+{{ else }}
+.bash_aliases
+.local/share/fonts
+{{ end }}
+
+README.md
