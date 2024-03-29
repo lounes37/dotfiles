@@ -1,16 +1,24 @@
 {{ if ne .chezmoi.os "linux" }}
 .local/share/fonts
+.bash_aliases
+.bashrc
+.local/share/fonts
+.zprofile
+.zshrc
 {{ else }}
 AppData
 Documents
-{{ end }
+{{ end }}
 
 {{ if ne .chezmoi.os "windows" }}
 AppData
 Documents
 {{ else }}
 .bash_aliases
+.bashrc
 .local/share/fonts
+.zprofile
+.zshrc
 {{ end }}
 
 README.md
