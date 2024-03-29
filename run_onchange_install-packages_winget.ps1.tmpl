@@ -1,0 +1,42 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Self-elevate the script if required
+if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+  if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+    $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+    Start-Process -Wait -FilePath PowerShell.exe -Verb Runas -ArgumentList $CommandLine
+    Exit
+  }
+}
+
+# List of software to install
+$software = @(
+    @{
+        Name = "Notion"
+        Id = "Notion.Notion"
+    },
+    @{
+        Name = "Firefox"
+        Id = "Mozilla.Firefox"
+    },
+    @{
+        Name = "Obsidian"
+        Id = "Obsidian.Obsidian"
+    },
+    @{
+        Name = "EarTrumpet"
+        Id = "File-New-Project.EarTrumpet"
+    }
+)
+# Loop through the software list and install each application
+foreach ($app in $software) {
+    Write-Host "Installing $($app.Name)..."
+    winget install --id=$($app.Id) --accept-package-agreements --no-upgrade --accept-source-agreements --disable-interactivity --silent
+    if ($?) {
+        Write-Host "$($app.Name) installed successfully."
+    }
+    else {
+        Write-Host "Failed to install $($app.Name)." -ForegroundColor Red
+    }
+}
+
+{{- end }}
