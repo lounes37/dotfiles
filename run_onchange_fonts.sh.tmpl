@@ -1,30 +1,72 @@
 {{- if eq .chezmoi.os "linux" -}}
 #!/bin/bash
-DOWNLOAD_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+# DOWNLOAD_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+# # Maximum number of download attempts
+# MAX_ATTEMPTS=2
+# for ((ATTEMPT = 1; ATTEMPT <= MAX_ATTEMPTS; ATTEMPT++)); do
+#     curl -OL "$DOWNLOAD_URL" 2>&1 && break
+#     echo "Download attempt $ATTEMPT failed. Retrying in 2 seconds..." 2>&1
+#     sleep 2
+# done
+
+# # Check if the JetBrainsMono folder exists and delete it if it does
+# if [ -d ~/.local/share/fonts/JetBrainsMonoNerd ]; then
+#     rm -rf ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
+# fi
+
+# mkdir -p ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
+# # Extract the new files into the JetBrainsMono folder and log the output
+# tar -xJkf JetBrainsMono.tar.xz -C ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
+
+# # Update font cache and log the output
+# fc-cache -v 2>&1
+
+# # clean up 
+# if \[ -f "JetBrainsMono.tar.xz" \]; then
+#     rm -r JetBrainsMono.tar.xz 2>&1
+# fi
+
+# clear
+
+# Array of download URLs
+DOWNLOAD_URLS=(
+    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz"
+)
+
 # Maximum number of download attempts
 MAX_ATTEMPTS=2
-for ((ATTEMPT = 1; ATTEMPT <= MAX_ATTEMPTS; ATTEMPT++)); do
-    curl -OL "$DOWNLOAD_URL" 2>&1 && break
-    echo "Download attempt $ATTEMPT failed. Retrying in 2 seconds..." 2>&1
-    sleep 2
+
+# Iterate over the download URLs
+for DOWNLOAD_URL in "${DOWNLOAD_URLS[@]}"; do
+    # Get the font name from the URL
+    FONT_NAME=$(basename "$DOWNLOAD_URL" .tar.xz)
+
+    for ((ATTEMPT = 1; ATTEMPT <= MAX_ATTEMPTS; ATTEMPT++)); do
+        curl -OL "$DOWNLOAD_URL" 2>&1 && break
+        echo "Download attempt $ATTEMPT for $FONT_NAME failed. Retrying in 2 seconds..." 2>&1
+        sleep 2
+    done
+
+    # Check if the font folder exists and delete it if it does
+    if [ -d ~/.local/share/fonts/"$FONT_NAME"Nerd ]; then
+        rm -rf ~/.local/share/fonts/"$FONT_NAME"Nerd 2>&1
+    fi
+
+    mkdir -p ~/.local/share/fonts/"$FONT_NAME"Nerd 2>&1
+
+    # Extract the new files into the font folder and log the output
+    tar -xJkf "$FONT_NAME".tar.xz -C ~/.local/share/fonts/"$FONT_NAME"Nerd 2>&1
+
+    # Clean up the downloaded archive
+    if [ -f "$FONT_NAME".tar.xz ]; then
+        rm -r "$FONT_NAME".tar.xz 2>&1
+    fi
 done
-
-# Check if the JetBrainsMono folder exists and delete it if it does
-if [ -d ~/.local/share/fonts/JetBrainsMonoNerd ]; then
-    rm -rf ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
-fi
-
-mkdir -p ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
-# Extract the new files into the JetBrainsMono folder and log the output
-tar -xJkf JetBrainsMono.tar.xz -C ~/.local/share/fonts/JetBrainsMonoNerd 2>&1
 
 # Update font cache and log the output
 fc-cache -v 2>&1
 
-# clean up 
-if [ -d "JetBrainsMono.tar.xz" ]; then
-	rm -r JetBrainsMono.tar.xz 2>&1
-fi
-
 clear
+
 {{- end }}
