@@ -2,7 +2,7 @@ local wezterm = require 'wezterm'
 local config = {}
 local launch_menu = {}
 
-config.font = wezterm.font 'JetBrainsMono Nerd Font'
+config.font = wezterm.font 'Hack Nerd Font'
 config.font_size = 14.0
 config.window_close_confirmation = "NeverPrompt"
 config.color_scheme = 'Gruvbox dark, hard (base16)'

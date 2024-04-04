@@ -14,7 +14,7 @@ Import-Module "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.Full
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
 # github-cli
-Invoke-Expression (gh completion -s powershell | Out-String)
+# Invoke-Expression (gh completion -s powershell | Out-String)
 
 # chezmoi
 Invoke-Expression (chezmoi completion powershell | Out-String)
