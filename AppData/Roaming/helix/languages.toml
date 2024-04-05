@@ -33,15 +33,15 @@ command = "ruff-lsp"
 [language-server.ruff.config]
 settings = { args = [] }
 
-[[language]]
-name = "rust"
-language-servers = ["rust-analyzer"]
-scope = "source.rust"
-injection-regex = "rust"
-file-types = ["rs"]
-comment-token = "//"
-indent = { tab-width = 4, unit = "	" }
-auto-format = true
+# [[language]]
+# name = "rust"
+# language-servers = ["rust-analyzer"]
+# scope = "source.rust"
+# injection-regex = "rust"
+# file-types = ["rs"]
+# comment-token = "//"
+# indent = { tab-width = 4, unit = "	" }
+# auto-format = true
 
 
 [[language]]
