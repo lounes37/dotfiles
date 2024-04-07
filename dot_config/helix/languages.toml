@@ -39,7 +39,7 @@ language-servers = ["rust-analyzer"]
 scope = "source.rust"
 injection-regex = "rust"
 file-types = ["rs"]
-comment-token = "//"
+#comment-token = "//"
 indent = { tab-width = 4, unit = "	" }
 auto-format = true
 
