@@ -1,19 +1,6 @@
-{{ if ne .chezmoi.os "linux" }}
-.local/share/fonts
-.bash_aliases
-.bashrc
-.local/share/fonts
-.zprofile
-.zshrc
-{{ else }}
-AppData
-Documents
-{{ end }}
+README.md
 
-{{ if ne .chezmoi.os "windows" }}
-AppData
-Documents
-{{ else }}
+{{- if eq .chezmoi.os "windows" }}
 .bash_aliases
 .bashrc
 .local/share/fonts
@@ -22,6 +9,9 @@ Documents
 .config/helix
 .config/yazi
 .config/kitty
-{{ end }}
+{{- end }}
 
-README.md
+{{- if eq .chezmoi.os "linux" }}
+AppData
+Documents
+{{- end }}
