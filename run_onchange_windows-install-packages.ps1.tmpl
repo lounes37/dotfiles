@@ -1,0 +1,16 @@
+{{ if eq .chezmoi.os "windows" -}}
+
+$json = @"
+{{.packages | toPrettyJson}}
+"@
+$packageInfo = $json | ConvertFrom-Json
+
+
+# Choco packages
+choco upgrade {{ range .packages.chocolatey -}} {{.}} {{ end }} -y -s'https://chocolatey.org/api/v2/'
+
+# Winget packages
+winget install {{ range .packages.winget -}} {{.}} {{ end }} --accept-package-agreements --no-upgrade --accept-source-agreements --disable-interactivity --silent
+
+
+{{ end -}}  

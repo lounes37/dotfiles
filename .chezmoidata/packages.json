@@ -1,0 +1,53 @@
+{
+  "packages": {
+    "chocolatey": [
+      "alacritty",
+      "aria2",
+      "ffmpeg",
+      "foobar2000",
+      "helix",
+      "imagemagick -PackageParameters NoDesktop=true",
+      "googlechrome",
+      "gsudo",
+      "gdu",
+      "vscode",
+      "openrgb",
+      "fd",
+      "fzf",
+      "zoxide",
+      "7zip",
+      "navi",
+      "rclone",
+      "gitui",
+      "restic",
+      "ripgrep",
+      "sumatrapdf.install --params=\"/WithPreview /NoDesktop /WithFilter\"",
+      "SpeedCrunch",
+      "bitwarden",
+      "starship",
+      "EarTrumpet",
+      "jpegview",
+      "wezterm.install",
+      "notepadplusplus",
+      "keepassxc",
+      "notion",
+      "hyperfine",
+      "ripgrep",
+      "clink-maintained",
+      "text-grab",
+      "lazygit",
+      "git.install --params=\"/NoShellIntegration /WindowsTerminalProfile /Editor:Notepad++\"",
+      "Firefox --params=\"/l:fr /NoTaskbarShortcut /RemoveDistributionDir /NoDesktopShortcut /NoAutoUpdate\"",
+      "nerd-fonts-jetbrainsmono",
+      "megacmd",
+      "micro",
+      "ventoy --params=\"/NoDesktopShortcutVentoy /NoDesktopShortcutVentoyPlugson /NoDesktopShortcutVentoyVlnk\""
+    ],
+    "winget": [
+      "eza-community.eza",
+      "EvanSu.Picocrypt",
+      "PaddiM8.kalker",
+      "dbrgn.tealdeer"
+    ]
+  }
+}
