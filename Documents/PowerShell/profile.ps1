@@ -113,3 +113,9 @@ Set-Alias -Name ls -Value list
 Set-Alias -Name ll -Value listlong
 Set-Alias admin Open-CurrentFolderAsAdmin
 
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+  Import-Module "$ChocolateyProfile"
+}
+
+

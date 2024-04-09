@@ -19,7 +19,7 @@ size = 13.0
 
 [font.normal]
 #family = "CaskaydiaCove Nerd Font"
-family = "JetBrainsMono Nerd Font"
+family = "Hack Nerd Font"
 
 [scrolling]
 history = 5000
