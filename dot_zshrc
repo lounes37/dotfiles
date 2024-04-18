@@ -15,7 +15,6 @@ compinit
 # Related to https://github.com/ogham/exa/issues/978
 if command -v eza &> /dev/null; then
 	alias ls='eza --icons'
-else
 	alias ll='eza -la --group-directories-first --icons'
 fi
 
