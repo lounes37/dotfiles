@@ -1,0 +1,155 @@
+{{ if eq .chezmoi.os "linux" }}
+{{ if eq .chezmoi.osRelease.idLike "fedora" }}
+#!/bin/bash
+
+# Configure dnf (In order: automatically select fastest mirror, parallel downloads, and disable telemetry)
+# fastestmirror=1
+printf "%s" "
+max_parallel_downloads=10
+countme=false
+" | sudo tee -a /etc/dnf/dnf.conf
+
+# Prompt Bluetooth
+echo "Do you want bluetooth? [y/n]"
+read -r bluetooth
+
+# Setup RPMFusion
+sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+sudo dnf groupupdate core -y
+
+
+# echo 'Make sure your system has been fully-updated by running "sudo dnf upgrade -y" and reboot it once.'
+sudo dnf upgrade -y
+
+# Debloat
+trafotin_debloat () {
+	log "trafotin_debloat"
+	local -a trafotin_debloating_stuff
+	trafotin_debloating_stuff=(
+	"bluez-cups"
+	"cheese"
+	"eog"
+	"fedora-bookmarks"
+	"fedora-chromium-config"
+	"geolite2*"
+	"gnome-backgrounds"
+	"gnome-boxes"
+	"gnome-calculator"
+	"gnome-calendar"
+	"gnome-characters"
+	"gnome-classic-session"
+	"gnome-clocks"
+	"gnome-color-manager"
+	"gnome-connections"
+	"gnome-contacts"
+	"gnome-font-viewer"
+	"gnome-logs"
+	"gnome-maps"
+	"gnome-remote-desktop"
+	"gnome-shell-extension-background-logo"
+	"gnome-shell-extension*"
+	"gnome-software"
+	"gnome-system-monitor"
+	"gnome-text-editorevince"
+	"gnome-themes-extra"
+	"gnome-tour"
+	"gnome-user-docs"
+	"gnome-weather"
+	"hyperv*"
+	"kpartx"
+	"mailcap"
+	"mediawriter"
+	"mozilla-filesystem"
+	"open-vm-tools"
+	"orca"
+	"perl-IO-Socket-SSL"
+	"perl*"
+	"podman"
+	"qemu-guest-agent"
+	"qgnomeplatform"
+	"realmd"
+	"sane*"
+	"simple-scan"
+	"virtualbox-guest-additions"
+	"xorg-x11-drv-vmware"
+)
+sudo dnf -y rm ${trafotin_debloating_stuff[*]}
+trafotin_debloat
+}
+
+sudo dnf remove -y anaconda* \
+	# Extra Firmware
+
+# Run Updates
+sudo dnf autoremove -y
+sudo fwupdmgr get-devices
+sudo fwupdmgr refresh --force
+sudo fwupdmgr get-updates -y
+sudo fwupdmgr update -y
+
+# Configure GNOME
+gsettings set org.gnome.desktop.a11y always-show-universal-access-status true
+#gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.desktop.interface clock-show-weekday true
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+
+# Setup Flathub beta and third party packages
+sudo fedora-third-party enable
+sudo fedora-third-party refresh
+flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+
+# Install things I need, top is uncategorized
+# Debloat
+trafotin_flathub () {
+	log "trafotin_flathub"
+	local -a trafotin_flathub_install
+	trafotin_flathub_install=(
+	"app.drey.Warp"
+	"com.brave.Browser"
+	"com.github.finefindus.eyedropper"
+	"com.github.tchx84.Flatseal"
+	"com.github.wwmm.easyeffects"
+	"com.giantpinkrobots.varia"
+	"com.heroicgameslauncher.hgl"
+	"com.obsproject.Studio"
+	"com.protonvpn.www"
+	"de.haeckerfelix.Fragments"
+	"info.febvre.Komikku"
+	"io.github.giantpinkrobots.varia"
+	"md.obsidian.Obsidian"
+	"org.gnome.Calculator"
+	"org.gnome.Calendar"
+	"org.gnome.Characters"
+	"org.gnome.Extensions"
+	"org.gnome.gitlab.cheywood.Buffer"
+	"org.gnome.Loupe"
+	"org.gnome.World.PikaBackup"
+	"org.keepassxc.KeePassXC"
+	"org.libreoffice.LibreOffice"
+	"org.mozilla.firefox"
+	"org.nickvision.tubeconverter"
+	"org.telegram.desktop"
+)
+flatpak install -y flathub
+sudo dnf -y rm ${trafotin_flathub_install[*]}
+trafotin_flathub
+
+sudo dnf install -y steam-devices neovim sqlite3  zsh-autosuggestions zsh-syntax-highlighting setroubleshoot  ffmpeg compat-ffmpeg4 akmod-v4l2loopback yt-dlp  --best --allowerasing
+sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+
+# Disable Bluetooth
+# or renable it!
+case "$bluetooth" in
+	y|Y)
+		sudo sed -i 's,install bluetooth /bin/disabled-bluetooth-by-security-misc,#install bluetooth /bin/disabled-bluetooth-by-security-misc,g' /etc/modprobe.d/30_security-misc.conf
+		sudo sed -i 's,install btusb /bin/disabled-bluetooth-by-security-misc,#install btusb /bin/disabled-bluetooth-by-security-misc,g' /etc/modprobe.d/30_security-misc.conf
+		;;
+	*)
+		echo "Disabling Bluetooth..."
+		sudo systemctl disable bluetooth
+esac
+
+
+echo "The configuration is now complete."
+{{ end }}
+{{ end }}
