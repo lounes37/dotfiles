@@ -7,9 +7,11 @@ plug "zsh-users/zsh-syntax-highlighting"
 #plug "MAHcodes/distro-prompt"
 
 # Load and initialise completion system
+setopt prompt_subst
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
-
 
 # Use the --git flag if the installed version of eza supports git
 # Related to https://github.com/ogham/exa/issues/978
