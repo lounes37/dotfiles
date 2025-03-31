@@ -1,5 +1,6 @@
 # starship
-Invoke-Expression (&starship init powershell)
+#$ENV:STARSHIP_CONFIG = "$HOME\.config\starship\starship.toml"
+#Invoke-Expression (&starship init powershell)
 
 #starship completions
 # Invoke-Expression (starship completions powershell | Out-String)
@@ -14,16 +15,18 @@ Import-Module "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.Full
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 
 # github-cli
-# Invoke-Expression (gh completion -s powershell | Out-String)
-
-# chezmoi
-Invoke-Expression (chezmoi completion powershell | Out-String)
-
-# Rclone completion
-Invoke-Expression (rclone completion powershell | Out-String)
+#Invoke-Expression (gh completion -s powershell | Out-String)
 
 # just completion
 # Invoke-Expression (just --completions powershell | Out-String)
+
+#Invoke-Expression (rclone completion powershell | Out-String)
+
+#$env:CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
+#Set-PSReadLineOption -Colors @{ "Selection" = "`e[7m" }
+#Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
+#carapace _carapace | Out-String | Invoke-Expression
+
 
 
 ### FUNCTIONS ###
@@ -112,10 +115,4 @@ Set-Alias -Name up -Value Update-profile
 Set-Alias -Name ls -Value list
 Set-Alias -Name ll -Value listlong
 Set-Alias admin Open-CurrentFolderAsAdmin
-
-$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
-}
-
 
