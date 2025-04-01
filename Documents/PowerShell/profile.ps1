@@ -1,9 +1,9 @@
 # starship
 #$ENV:STARSHIP_CONFIG = "$HOME\.config\starship\starship.toml"
-#Invoke-Expression (&starship init powershell)
+Invoke-Expression (&starship init powershell)
 
 #starship completions
-# Invoke-Expression (starship completions powershell | Out-String)
+#Invoke-Expression (starship completions powershell | Out-String)
 
 ## scoop search speedup
 Invoke-Expression (&sfsu hook) # need to install sfsu
@@ -20,7 +20,7 @@ Invoke-Expression (& { (zoxide init powershell | Out-String) })
 # just completion
 # Invoke-Expression (just --completions powershell | Out-String)
 
-#Invoke-Expression (rclone completion powershell | Out-String)
+Invoke-Expression (rclone completion powershell | Out-String)
 
 #$env:CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
 #Set-PSReadLineOption -Colors @{ "Selection" = "`e[7m" }
