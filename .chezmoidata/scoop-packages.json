@@ -1,0 +1,20 @@
+{
+    "packages": [
+        {
+            "name": "7zip",
+            "bucket": "main"
+        },
+        {
+            "name": "lsd",
+            "bucket": "main"
+        },
+        {
+            "name": "rclone",
+            "bucket": "main"
+        },
+        {
+            "name": "ludusavi",
+            "bucket": "extras"
+        }
+    ]
+}

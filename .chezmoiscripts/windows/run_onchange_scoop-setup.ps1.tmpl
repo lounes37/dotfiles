@@ -1,0 +1,116 @@
+# PowerShell script for chezmoi to set up Scoop, Git, and install packages from .chezmoidata/scoop-packages.json
+# Only runs on Windows using chezmoi's os check
+# Uses package.bucket and package.name from JSON
+
+{{ if eq .chezmoi.os "windows" }}
+# Ensure script runs with error handling
+$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
+
+# Log PowerShell version for debugging
+Write-Host "Running PowerShell version: $($PSVersionTable.PSVersion)"
+
+# Function to check if a command exists
+function Test-CommandExists {
+    param ($command)
+    return $null -ne (Get-Command $command -ErrorAction SilentlyContinue)
+}
+
+try {
+    # Step 1: Install Scoop if not already installed
+    if (-not (Test-CommandExists "scoop")) {
+        Write-Host "Installing Scoop..."
+        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+        $installScript = Invoke-RestMethod -Uri "https://get.scoop.sh"
+        Invoke-Expression $installScript
+    } else {
+        Write-Host "Scoop is already installed."
+    }
+
+    # Verify Scoop installation
+    if (-not (Test-CommandExists "scoop")) {
+        throw "Scoop installation failed."
+    }
+
+    # Step 2: Install Git if not already installed
+    if (-not (Test-CommandExists "git")) {
+        Write-Host "Installing Git via Scoop..."
+        & scoop install git
+    } else {
+        Write-Host "Git is already installed."
+    }
+
+    # Step 3: Install packages from .chezmoidata/scoop-packages.json
+    $jsonPath = "{{ .chezmoi.sourceDir }}/.chezmoidata/scoop-packages.json"
+    if (Test-Path $jsonPath -PathType Leaf) {
+        Write-Host "Reading packages from $jsonPath..."
+        $jsonContent = Get-Content -Path $jsonPath -Raw | ConvertFrom-Json
+        $packages = $jsonContent.packages
+
+        if ($packages -and $packages.Count -gt 0) {
+            # Get current buckets (handle Scoop output consistently)
+            $bucketOutput = & scoop bucket list
+            if (-not $bucketOutput) {
+                $currentBuckets = @()
+            } else {
+                $currentBuckets = $bucketOutput -split "`n" | Where-Object { $_ } | ForEach-Object { $_.Trim() }
+                if ($bucketOutput | Get-Member -Name "Name" -ErrorAction SilentlyContinue) {
+                    $currentBuckets = $bucketOutput | Select-Object -ExpandProperty Name
+                }
+            }
+            Write-Host "Current buckets: $($currentBuckets -join ', ')"
+
+            foreach ($package in $packages) {
+                $pkgName = $package.name
+                $pkgBucket = $package.bucket
+
+                if (-not $pkgName -or -not $pkgBucket) {
+                    Write-Warning "Skipping invalid package entry: name or bucket missing."
+                    continue
+                }
+
+                try {
+                    # Add the bucket if it doesn't exist
+                    if (-not ($currentBuckets -contains $pkgBucket)) {
+                        Write-Host "Adding bucket: $pkgBucket"
+                        & scoop bucket add $pkgBucket
+                        $bucketOutput = & scoop bucket list
+                        $currentBuckets = $bucketOutput -split "`n" | Where-Object { $_ } | ForEach-Object { $_.Trim() }
+                        if ($bucketOutput | Get-Member -Name "Name" -ErrorAction SilentlyContinue) {
+                            $currentBuckets = $bucketOutput | Select-Object -ExpandProperty Name
+                        }
+                        Write-Host "Updated buckets: $($currentBuckets -join ', ')"
+                    }
+
+                    # Check if package is already installed
+                    $installedOutput = & scoop list
+                    $installed = $installedOutput -split "`n" | Where-Object { $_ -match "^$pkgName\s" }
+                    if (-not $installed) {
+                        Write-Host "Installing package: $pkgName from bucket: $pkgBucket"
+                        & scoop install "$pkgBucket/$pkgName"
+                    } else {
+                        Write-Host "Package $pkgName is already installed."
+                    }
+                }
+                catch {
+                    Write-Warning "Failed to install $pkgName from $pkgBucket. Error: $_"
+                    continue
+                }
+            }
+        } else {
+            Write-Host "No packages found in $jsonPath."
+        }
+    } else {
+        Write-Warning "JSON file not found at $jsonPath. Skipping package installation."
+    }
+
+    Write-Host "Scoop setup completed successfully."
+}
+catch {
+    Write-Error "Error during Scoop setup: $_"
+    exit 1
+}
+{{ else }}
+# On non-Windows systems, output a message and exit gracefully
+Write-Host "This script is designed for Windows only. Skipping execution on {{ .chezmoi.os }}."
+{{ end }}

@@ -68,22 +68,10 @@
       "zip"
     ],
     "winget": [
-      "bootandy.dust",
-      "dbrgn.tealdeer",
-      "eva-community.eza",
       "EvanSu.Picocrypt",
       "PaddiM8.kalker",
       "RustemMussabekov.Raindrop",
-      "SVGExplorerExtension.SVGExplorerExtension",
-      "Microsoft.PowerShell",
-      "Microsoft.WindowsAppRuntime.1.4",
-      "Microsoft.VCRedist.2015+.x64",
-      "Microsoft.VCRedist.2012.x64",
-      "vMicrosoft.VCRedist.2010.x86",
-      "Microsoft.VCRedist.2015+.x86",
-      "Microsoft.VCRedist.2012.x86",
-      "Microsoft.VCRedist.2010.x64",
-      "Microsoft.VCLibs.Desktop.14"
+      "SVGExplorerExtension.SVGExplorerExtension"
     ]
   }
 }
