@@ -1,15 +1,7 @@
-live_config_reload = true
 
 #import = [
 #".config/alacritty/nord.toml"
 #]
-
-[shell]
-# Windows
-program = "pwsh"
-#args = ["-NoLogo", "-WorkingDirectory ~"]
-args = ["-NoLogo"]
-
 
 [cursor]
 style = { blinking = "On", shape = "Block" }
@@ -18,8 +10,7 @@ style = { blinking = "On", shape = "Block" }
 size = 13.0
 
 [font.normal]
-#family = "CaskaydiaCove Nerd Font"
-family = "Hack Nerd Font"
+family = "CaskaydiaCove Nerd Font"
 
 [scrolling]
 history = 5000
@@ -115,3 +106,8 @@ bindings = [
     { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
     { key = "Q", mods = "Control|Shift", action = "Quit" },
 ]
+
+[general]
+live_config_reload = true
+
+[terminal]
