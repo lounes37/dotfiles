@@ -1,20 +1,72 @@
 {
-    "packages": [
-        {
-            "name": "7zip",
-            "bucket": "main"
-        },
-        {
-            "name": "lsd",
-            "bucket": "main"
-        },
-        {
-            "name": "rclone",
-            "bucket": "main"
-        },
-        {
-            "name": "ludusavi",
-            "bucket": "extras"
-        }
-    ]
+  "packages": [
+    {
+      "name": "7zip",
+      "bucket": "main"
+    },
+    {
+      "name": "lsd",
+      "bucket": "main"
+    },
+    {
+      "name": "rclone",
+      "bucket": "main"
+    },
+    {
+      "name": "chezmoi",
+      "bucket": "main"
+    },
+    {
+      "name": "clink",
+      "bucket": "main"
+    },
+    {
+      "name": "eza",
+      "bucket": "main"
+    },
+    {
+      "name": "ffmpeg",
+      "bucket": "main"
+    },
+    {
+      "name": "Hack-NF",
+      "bucket": "nerd-fonts"
+    },
+    {
+      "name": "helix",
+      "bucket": "main"
+    },
+    {
+      "name": "jpegview",
+      "bucket": "extras"
+    },
+    {
+      "name": "micro",
+      "bucket": "main"
+    },
+    {
+      "name": "megacmd",
+      "bucket": "main"
+    },
+    {
+      "name": "sfsu",
+      "bucket": "extras"
+    },
+    {
+      "name": "starship",
+      "bucket": "main"
+    },
+    {
+      "name": "yazi",
+      "bucket": "main"
+    },
+    {
+      "name": "zoxide",
+      "bucket": "main"
+    },
+    {
+      "name": "ludusavi",
+      "bucket": "extras"
+    }
+  ]
 }

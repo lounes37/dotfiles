@@ -1,4 +1,4 @@
-theme = "ayu_evolve"
+theme = "gruvbox"
 
 [editor]
 line-number = "absolute"
@@ -16,7 +16,7 @@ hidden = false
 
 [editor.statusline]
 left = ["mode", "spinner", "file-name"]
-# center = ["file-name"]
+center = ["file-name"]
 right = [
   "diagnostics",
   "selections",
@@ -35,10 +35,8 @@ mode.insert = "INSERT"
 mode.select = "SELECT"
 
 [keys.normal]
-C-r = ":config-reload"
+"C-r" = ":config-reload"
 "C-s" = ":w"                           # Ctrl-s saves the current file 
-y = "yank_main_selection_to_clipboard" # y yanks selection to clipboard
-p = "paste_clipboard_before"           # p pastes clipboard before
 
 [editor.lsp]
 display-inlay-hints = true
