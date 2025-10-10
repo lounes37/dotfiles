@@ -1,6 +1,8 @@
 # starship
 #$ENV:STARSHIP_CONFIG = "$HOME\.config\starship\starship.toml"
 Invoke-Expression (&starship init powershell)
+Add-Content -Path $PROFILE -Value "tdl completion powershell | Out-String | Invoke-Expression"
+
 
 #starship completions
 #Invoke-Expression (starship completions powershell | Out-String)
