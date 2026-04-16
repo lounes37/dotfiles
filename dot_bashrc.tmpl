@@ -1,0 +1,91 @@
+### PATH
+if [ -d "$HOME/.bin" ] ; then
+  PATH="$HOME/.bin:$PATH"
+fi
+if [ -d "$HOME/.local/bin" ] ; then
+  PATH="$HOME/.local/bin:$PATH"
+fi
+
+### EXPORT
+export TERM="xterm-256color"
+export HISTCONTROL=ignoredups:erasedups
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+{{ if lookPath "zed" -}}
+export EDITOR=zed
+{{ end -}}
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+### SHOPT
+shopt -s autocd
+shopt -s cdspell
+shopt -s cmdhist
+shopt -s dotglob
+shopt -s histappend
+shopt -s expand_aliases
+shopt -s checkwinsize
+
+bind "set completion-ignore-case on"
+
+# Bash completion
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+### PROMPT
+{{ if lookPath "starship" -}}
+eval "$(starship init bash)"
+{{ else -}}
+RED='\[\e[31m\]'
+GREEN='\[\e[32m\]'
+YELLOW='\[\e[33m\]'
+BLUE='\[\e[34m\]'
+CYAN='\[\e[36m\]'
+BOLD='\[\e[1m\]'
+RESET='\[\e[0m\]'
+PS1="${BOLD}${GREEN}\u${RESET}${CYAN}@${RESET}${BOLD}${BLUE}\h${RESET} ${YELLOW}\w${RESET} \$(git branch 2>/dev/null | grep '^*' | sed 's/* //'| xargs -I{} echo \"${RED}({})${RESET}\")
+${CYAN}❯${RESET} "
+{{ end -}}
+
+### ALIASES
+# ls → eza
+{{ if lookPath "eza" -}}
+alias ls='eza -al --color=always --group-directories-first'
+alias la='eza -a --color=always --group-directories-first'
+alias ll='eza -la --color=always --group-directories-first'
+alias lt='eza -aT --color=always --group-directories-first'
+{{ else -}}
+alias ls='ls --color=auto'
+alias ll='ls -lah --color=auto'
+alias la='ls -a --color=auto'
+{{ end -}}
+
+# cat → bat
+{{ if lookPath "batcat" -}}
+alias cat="batcat --color auto"
+{{ else if lookPath "bat" -}}
+alias cat="bat --color auto"
+{{ end -}}
+
+# Useful general aliases
+alias ..='cd ..'
+alias ...='cd ../..'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias free='free -h'
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+
+### zoxide
+{{ if lookPath "zoxide" -}}
+eval "$(zoxide init bash)"
+alias cd='z'
+alias cdi='zi'
+{{ end -}}
